@@ -5,7 +5,11 @@ const TransactionSchema = new mongoose.Schema({
   id: { type: String, required: true },
   timestamp: { type: Number, required: true },
   txHash: { type: String, required: true },
-  action: { type: String, required: true },
+  action: { 
+    type: String, 
+    required: true,
+    enum: ['SEND', 'RECEIVE', 'TRANSFER'] 
+  },
   amount: { type: Number, required: true },
   assetPriceUSD: { type: Number, required: true },
   reserve: {
