@@ -9,12 +9,27 @@ interface ChartProps {
 }
 
 export default function Chart({ transactions }: ChartProps) {
+  // Check if transactions exist and have data
+  if (!transactions || transactions.length === 0) {
+    return (
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Transaction Volume Over Time</h2>
+        <div className="h-[400px] bg-white p-6 rounded-xl shadow-md border border-gray-100 flex items-center justify-center">
+          <p className="text-gray-500">No transaction data available</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Sort transactions by timestamp
+  const sortedTransactions = [...transactions].sort((a, b) => a.timestamp - b.timestamp);
+
   const data = [
     {
       id: "Transaction Volume",
-      data: transactions.map((tx) => ({
+      data: sortedTransactions.map((tx) => ({
         x: new Date(tx.timestamp * 1000).toLocaleDateString(),
-        y: tx.amount * tx.assetPriceUSD,
+        y: Number((tx.amount * tx.assetPriceUSD).toFixed(2)),
       })),
     },
   ];
@@ -27,7 +42,7 @@ export default function Chart({ transactions }: ChartProps) {
           data={data}
           margin={{ top: 40, right: 50, bottom: 60, left: 80 }}
           xScale={{ type: "point" }}
-          yScale={{ type: "linear", stacked: true, min: 'auto', max: 'auto' }}
+          yScale={{ type: "linear", stacked: false, min: 'auto', max: 'auto' }}
           curve="monotoneX"
           axisBottom={{
             tickSize: 5,

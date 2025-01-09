@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const walletRoutes = require('./routes/walletRoutes');
 const connectDB = require('./config/db');
 const { exec } = require('child_process');
@@ -25,16 +26,18 @@ exec(`lsof -ti :${PORT}`, (err, stdout) => {
   }
 });
 
-
 function startServer() {
   connectDB();
 
+ 
+  app.use(cors());
+
   app.use(express.json());
 
-  // Routes
+
   app.use('/api/wallet', walletRoutes);
 
-  // Start the server
+
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });

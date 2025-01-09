@@ -29,7 +29,7 @@ const getUserTransactions = async (user) => {
   const variables = { user };
 
   try {
-    const data = await request(endpoint, query, variables);
+    const data = await request(endpoint, query, variables);//sends rhe Graphql query to aave api
     return data.userTransactions;
   } catch (error) {
     throw new Error('Error fetching data from Aave API');
